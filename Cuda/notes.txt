@@ -1,0 +1,170 @@
+__global__ void smoothing_GPU_Parallel_without_shared(PPMPixel *d_image_output, PPMPixel *d_image, int n) {
+
+    int idx_h;	
+	int idx =  blockDim.x * blockIdx.x + threadIdx.x;
+
+    // Transfer data to shared memory
+    s[idx] = d_image[idx]
+    //__syncthreads();
+
+    // Execute work
+	//if (idx < n) {
+    for (y = i - ((MASK_WIDTH-1)/2); y <= (i + ((MASK_WIDTH-1)/2)); y++) {
+        
+        for (x = j - ((MASK_WIDTH-1)/2); x <= (j + ((MASK_WIDTH-1)/2)); x++) {
+            if (x >= 0 && y >= 0 && y < image->y && x < image->x) {
+                total_red += image_copy->data[(y * image->x) + x].red;
+                total_blue += image_copy->data[(y * image->x) + x].blue;
+                total_green += image_copy->data[(y * image->x) + x].green;
+                //idx_h = (d_image[idx].red * 16) + (d_image[idx].green * 4) + (d_image[idx].blue);	
+                printf("thread_num: %d", idx);
+            }
+        }
+    }
+
+    image->data[(i * image->x) + j].red = total_red / (MASK_WIDTH*MASK_WIDTH);
+    image->data[(i * image->x) + j].blue = total_blue / (MASK_WIDTH*MASK_WIDTH);
+    image->data[(i * image->x) + j].green = total_green / (MASK_WIDTH*MASK_WIDTH);
+
+    // Transfer data back to global memory
+    //d_image_output[idx] = s[idx]
+
+}
+
+thread_num: 0, r: 0, b: 47, g: 19
+thread_num: 1, r: 0, b: 63, g: 25
+
+
+// ######
+
+
+thread_num: 1, r: 0, b: 63, g: 25
+thread_num: 2, r: 0, b: 79, g: 32
+thread_num: 3, r: 0, b: 79, g: 32
+thread_num: 4, r: 0, b: 79, g: 32
+thread_num: 5, r: 0, b: 79, g: 32
+thread_num: 6, r: 0, b: 79, g: 32
+thread_num: 7, r: 0, b: 79, g: 32
+thread_num: 8, r: 0, b: 79, g: 32
+thread_num: 9, r: 0, b: 79, g: 32
+thread_num: 10, r: 0, b: 79, g: 32
+thread_num: 11, r: 0, b: 79, g: 32
+thread_num: 12, r: 0, b: 79, g: 32
+thread_num: 13, r: 0, b: 79, g: 32
+thread_num: 14, r: 0, b: 79, g: 32
+thread_num: 15, r: 0, b: 79, g: 32
+thread_num: 16, r: 0, b: 79, g: 32
+thread_num: 17, r: 0, b: 79, g: 32
+thread_num: 18, r: 0, b: 79, g: 32
+thread_num: 19, r: 0, b: 79, g: 32
+thread_num: 20, r: 0, b: 79, g: 32
+thread_num: 21, r: 0, b: 79, g: 32
+thread_num: 22, r: 0, b: 79, g: 32
+thread_num: 23, r: 0, b: 79, g: 32
+thread_num: 24, r: 0, b: 79, g: 32
+thread_num: 25, r: 0, b: 79, g: 32
+
+
+
+
+
+thread_num: 0, r: 9,  b: 1186, g: 486
+thread_num: 1, r: 12, b: 1583, g: 649
+thread_num: 2, r: 15, b: 1980, g: 812
+thread_num: 3, r: 15, b: 1985, g: 815
+thread_num: 4, r: 15, b: 1985, g: 815
+thread_num: 5, r: 15, b: 1985, g: 815
+thread_num: 6, r: 15, b: 1985, g: 815
+thread_num: 7, r: 15, b: 1985, g: 815
+thread_num: 8, r: 15, b: 1985, g: 815
+thread_num: 9, r: 15, b: 1985, g: 815
+thread_num: 10, r: 15, b: 1985, g: 815
+thread_num: 11, r: 15, b: 1985, g: 815
+thread_num: 12, r: 15, b: 1985, g: 815
+thread_num: 13, r: 15, b: 1985, g: 815
+thread_num: 14, r: 15, b: 1985, g: 815
+thread_num: 15, r: 15, b: 1985, g: 815
+thread_num: 16, r: 15, b: 1985, g: 815
+thread_num: 17, r: 15, b: 1985, g: 815
+thread_num: 18, r: 15, b: 1985, g: 815
+thread_num: 19, r: 15, b: 1985, g: 815
+thread_num: 20, r: 15, b: 1985, g: 815
+thread_num: 21, r: 15, b: 1985, g: 815
+thread_num: 22, r: 15, b: 1985, g: 815
+thread_num: 23, r: 15, b: 1985, g: 815
+thread_num: 24, r: 15, b: 1985, g: 815
+thread_num: 25, r: 15, b: 1985, g: 815
+thread_num: 26, r: 15, b: 1985, g: 815
+thread_num: 27, r: 15, b: 1985, g: 815
+thread_num: 28, r: 15, b: 1985, g: 815
+thread_num: 29, r: 15, b: 1985, g: 815
+thread_num: 30, r: 15, b: 1985, g: 815
+thread_num: 31, r: 15, b: 1985, g: 815
+thread_num: 32, r: 15, b: 1985, g: 815
+thread_num: 33, r: 15, b: 1985, g: 815
+thread_num: 34, r: 15, b: 1985, g: 815
+
+
+
+
+__global__ void smoothing_GPU_Parallel_2(PPMPixel *d_image_output, PPMPixel *d_image, int imageY, int imageX, int n) {
+
+    //__shared__ PPMPixel s[(BLOCK_SIZE) * (BLOCK_SIZE)];
+    __shared__ PPMPixel s[(BLOCK_SIZE)];
+
+    int total_red, total_blue, total_green, y, x;
+
+	int idxTotal =  blockDim.x * blockIdx.x + threadIdx.x;
+
+    //int tx = BLOCK_SIZE*blockIdx.x + threadIdx.x;
+    //int ty = BLOCK_SIZE*blockIdx.y + threadIdx.y;
+    //int idxTotal = ty * tx + tx;
+
+    // Transfer data to shared memory
+    s[idxTotal] = d_image[idxTotal];
+    __syncthreads(); 
+
+    total_red = total_blue = total_green = 0;
+
+    for (y = idxTotal - ((MASK_WIDTH-1)/2); y <= (idxTotal + ((MASK_WIDTH-1)/2)); y+=imageX) {
+    
+        for (x = (idxTotal%x) - ((MASK_WIDTH-1)/2); x <= ((idxTotal%x) + ((MASK_WIDTH-1)/2)); x++) {
+            if (x >= 0 && y >= 0 && y < imageY && x < imageX) {
+                
+                printf("%d \n", x);
+                //total_red += d_image[(y * imageX) + x].red;
+                //total_blue += d_image[(y * imageX) + x].blue;
+                //total_green += d_image[(y * imageX) + x].green;
+            }
+        }
+    } /*
+
+    // Execute work
+	if (tx >= 0 && ty >= 0 && ty < imageY && x < imageX) {
+        s[(tx * imageX) + ty].red = total_red / (MASK_WIDTH*MASK_WIDTH);
+        s[(tx * imageX) + ty].blue = total_blue / (MASK_WIDTH*MASK_WIDTH);
+        s[(tx * imageX) + ty].green = total_green / (MASK_WIDTH*MASK_WIDTH);
+	} */
+    
+    // Transfer data back to global memory
+    d_image_output[idxTotal] = s[idxTotal];
+
+    //__syncthreads(); 
+   // if (idxTotal == 2  && (blockIdx.x == 0) && (threadIdx.x < 10)) {
+   //     printf("thread_num: %d, r: %d, b: %d, g: %d \n", idxTotal, d_image_output[idxTotal].red, d_image_output[idxTotal].blue, d_image_output[idxTotal].green);
+   // }
+}
+
+
+
+
+hread_num: 0, r: 1695, b: 1469, g: 1631
+thread_num: 1, r: 2284, b: 1960, g: 2224
+thread_num: 2, r: 2806, b: 2495, g: 2700
+thread_num: 3, r: 2754, b: 2364, g: 2739
+thread_num: 4, r: 2750, b: 2301, g: 2782
+thread_num: 5, r: 2746, b: 2285, g: 2821
+thread_num: 6, r: 2789, b: 2272, g: 2816
+thread_num: 7, r: 2769, b: 2264, g: 2790
+thread_num: 8, r: 2762, b: 2253, g: 2783
+thread_num: 9, r: 2742, b: 2243, g: 2775
